@@ -4,7 +4,7 @@ import os
 
 load_dotenv()
 
-def scrape_instagram_profile(username, password, profile_name, target_type='followers', min_followers=0):
+def scrape_instagram_profile(username, password, profile_name, limit, target_type='followers', min_followers=0):
     loader = instaloader.Instaloader()
     help_me = "-=" * 25 + "-"
 
@@ -34,6 +34,9 @@ def scrape_instagram_profile(username, password, profile_name, target_type='foll
         print(f"Парсинг данных для профиля {profile_name} ({'подписчики' if target_type == 'followers' else 'подписки'})...")
         print(help_me)
 
+        if limit:
+            target_list = list(target_list)[:limit]
+        
         for person in target_list:
             print(f"Обработка пользователя: {person.username}")
             print(help_me)
@@ -59,5 +62,6 @@ password = os.getenv("INSTAGRAM_PASSWORD") # .env, ваш пароль в Instag
 profile_name = "username" # Замените на нужное имя профиля для поиска
 target_type = "followers" # "followers" для подписчиков, "followees" для подписок
 min_followers = 0 # Минимальное количество подписчиков для фильтрации
+limit = None # Лимит парсинга пользователей (int)
 
-scrape_instagram_profile(username, password, profile_name, target_type, min_followers)
+scrape_instagram_profile(username, password, profile_name, limit, target_type, min_followers)
