@@ -22,7 +22,7 @@
    touch .env
    ```
 
-4. В самом конце кода, в файле main.py установите значения необходимых переменных (profile_name, target_type, min_followers)
+4. В самом конце кода, в файле main.py установите значения необходимых переменных (profile_name, target_type, min_followers, limit)
 
 5. Запустите скрипт
    ```bash
