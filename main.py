@@ -1,6 +1,7 @@
 import instaloader
 from dotenv import load_dotenv
 import os
+import csv
 
 load_dotenv()
 
@@ -36,21 +37,28 @@ def scrape_instagram_profile(username, password, profile_name, limit, target_typ
 
         if limit:
             target_list = list(target_list)[:limit]
-        
-        for person in target_list:
-            print(f"Обработка пользователя: {person.username}")
-            print(help_me)
-            if person.followers >= min_followers:
-                user_info = {
-                    "Логин": person.username,
-                    "ID": person.userid,
-                    "Количество подписчиков": person.followers,
-                    "Количество контента": person.mediacount,
-                }
 
-                for key, value in user_info.items():
-                    print(f"{key}: {value}")
+        csv_filename = f"{profile_name}_{target_type}.csv"
+        with open(csv_filename, mode='w', newline='', encoding='utf-8') as csv_file:
+            fieldnames = ["Логин", "ID", "Количество подписчиков", "Количество контента"]
+            writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
+
+            writer.writeheader()
+
+            for person in target_list:
+                print(f"Обработка пользователя: {person.username}")
                 print(help_me)
+                if person.followers >= min_followers:
+                    user_info = {
+                        "Логин": person.username,
+                        "ID": person.userid,
+                        "Количество подписчиков": person.followers,
+                        "Количество контента": person.mediacount,
+                    }
+
+                    writer.writerow(user_info)
+
+        print(f"Данные успешно сохранены в файл: {csv_filename}")
 
     except Exception as e:
         print(f"Произошла ошибка: {str(e)}")
